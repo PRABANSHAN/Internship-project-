@@ -18,8 +18,7 @@ This project is fully front-end based and showcases strong understanding of web 
 - Clean and minimal sign-in & sign-up interface (UI only)  
 - Responsive navigation bar  
 - About page with animated info cards  
-- Contact page with styled message form  
-- Fully responsive across devices  
+- Contact page with styled message form
 - Smooth transitions and visual feedback on interactions  
 
 ---
