@@ -71,11 +71,7 @@ project/
     Copy code
     cd project-folder
 
-  4. Open the project
-     
-      Option 1: Double-click index.html
-
-      Option 2 (Recommended): VS Code Live Server
+  4. Open the project(Recommended): VS Code Live Server
 
           -Right-click index.html
 
