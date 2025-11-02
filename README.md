@@ -28,7 +28,7 @@ This project is fully front-end based and showcases strong understanding of web 
 
 - **HTML5** — Layout & Page Structure  
 - **CSS3** — Styling, Flexbox, Animations, Responsiveness  
-- **JavaScript (Vanilla JS)** — Interactivity & Navigation  
+- **JavaScript** — Interactivity & Navigation  
 - **Git + GitHub** — Version Control  
 - **Vercel** — Deployment  
 
