@@ -1,0 +1,375 @@
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI, sans-serif;}
+
+body{background:#e0e0e0;}
+
+header{
+  background:#fff;padding:18px 30px;
+  display:flex;justify-content:space-between;
+  align-items:center;border-bottom:1px solid #ddd;
+  position:sticky;top:0;z-index:10;
+}
+
+.logo{font-size:20px;font-weight:600;}
+
+.nav-links a{
+  margin:0 18px;color:#555;text-decoration:none;
+  font-size:15px;
+}
+
+.signin-btn{
+  border:1px solid #777;padding:6px 15px;border-radius:5px;
+  text-decoration:none;color:#333;font-size:14px;
+}
+
+.hero{
+  text-align:center;padding:90px 20px;background:#dcdcdc;
+}
+
+.hero h1{font-size:42px;margin-bottom:10px;}
+.hero p{font-size:17px;margin-bottom:25px;color:#555;}
+
+.btn{
+  padding:10px 22px;background:#333;color:#fff;
+  border:none;border-radius:6px;cursor:pointer;
+  text-decoration:none;font-size:15px;
+}
+
+.cards{
+  padding:50px 20px;
+  display:flex;gap:30px;justify-content:center;
+}
+
+.card{
+  background:#fff;padding:30px;border-radius:10px;
+  width:300px;text-align:left;
+  box-shadow:0 3px 8px rgba(0,0,0,.15);
+}
+
+.card i{font-size:28px;margin-bottom:10px;}
+
+.card h3{margin-bottom:8px;font-size:19px;}
+
+.hero.small{padding:60px 20px;}
+
+.form-container{
+  width:50%;margin:30px auto;
+  display:flex;flex-direction:column;gap:15px;
+}
+
+.form-container input,.form-container textarea{
+  padding:12px;border:1px solid #ccc;border-radius:6px;
+}
+
+textarea{min-height:130px;}
+
+.auth-box{
+  width:380px;margin:120px auto;background:#fff;
+  padding:35px;border-radius:10px;text-align:center;
+  box-shadow:0 3px 8px rgba(0,0,0,.15);
+}
+
+.auth-box input{
+  width:100%;padding:12px;margin:10px 0;
+  border:1px solid #ccc;border-radius:6px;
+}
+
+.auth-box .forgot{display:block;text-align:right;font-size:13px;color:#444;margin-bottom:12px;}
+
+@media(max-width:768px){
+  .cards{flex-direction:column;align-items:center;}
+  .form-container{width:90%;}
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 1100px;
+  margin: 30px auto;
+}
+
+
+.feature-card {
+  background: #fff;
+  padding: 35px;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,.15);
+  transition: 0.25s ease;
+  text-align: left;
+}
+
+.feature-card:hover {
+  transform: scale(1.06);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+}
+
+.feature-card h3 {
+  margin-bottom: 6px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.feature-card p {
+  font-size: 14px;
+  color: #666;
+  margin-top: 6px;
+}
+
+
+/* Mobile */
+@media(max-width: 768px){
+  .features-grid {
+    grid-template-columns: 1fr;
+    padding: 0 20px;
+  }
+}
+
+.about-section {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.about-box {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.12);
+  line-height: 1.6;
+}
+
+.about-box h2 {
+  margin-bottom: 12px;
+}
+
+.about-box ul {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.about-box ul li {
+  margin: 5px 0;
+}
+
+.card:hover {
+  transform: scale(1.06);
+  box-shadow: 0 8px 20px rgba(0,0,0,.18);
+  transition: .25s ease;
+}
+
+.hero {
+  padding: 60px 20px;
+}
+
+.hero.small {
+  padding: 50px 20px;
+  margin-bottom: 0;
+}
+
+section, .cards, .features-grid, .about-grid {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 1000px;
+  margin: 40px auto;
+}
+
+.about-card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,.15);
+  text-align: left;
+}
+
+.about-card h2 {
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Reduce big spaces under section headers */
+.hero {
+  padding: 60px 20px !important;
+}
+
+.hero.small {
+  padding: 40px 20px;
+}
+
+/* Remove extra top margin before cards and content sections */
+section, .cards, .features-grid, .about-grid, .form-container {
+  margin-top: 10px !important;
+  margin-bottom: 20px !important;
+}
+
+/* Fix space if any blank padding injected by browser */
+body {
+  padding-top: 0 !important;
+}
+
+/* Ensure cards sit closer to header */
+.cards {
+  margin-top: 25px !important;
+}
+
+/* Features page spacing fix */
+.features-grid {
+  margin-top: 25px !important;
+}
+
+/* About cards spacing fix */
+.about-grid {
+  margin-top: 25px !important;
+}
+
+/* Make all feature cards same big size */
+.card, .feature-card, .about-card {
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Bigger cards like dashboard tiles */
+.card, .feature-card {
+  padding: 35px !important;
+}
+
+/* Icon, title, desc alignment consistency */
+.card i, .feature-card i {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.card h3, .feature-card h3 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 1100px;
+  margin: 40px auto;
+}
+
+/* Contact form width adjustment */
+.form-container {
+  width: 500px; /* reduce width */
+  max-width: 90%;
+  margin: 30px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-container input,
+.form-container textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* Make textarea height even */
+.form-container textarea {
+  min-height: 130px;
+}
+
+.features-grid {
+  padding-top: 90px; /* adjust if header overlapping */
+}
+
+/* Proper top spacing for Features page */
+.features-grid {
+    padding-top: 60px !important;  /* ~1cm spacing */
+    margin-top: 0 !important;
+}
+
+/* Hero Section Improvements */
+.hero {
+    text-align: center;
+    padding: 120px 20px 80px;
+    background-color: #e5e5e5;
+}
+
+.hero-title {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.hero-subtitle {
+    font-size: 20px;
+    color: #555;
+    max-width: 650px;
+    margin: 0 auto 28px;
+    line-height: 1.6;
+}
+
+.cta-btn {
+    padding: 14px 32px;
+    background: #000;
+    color: #fff;
+    font-size: 18px;
+    border-radius: 8px;
+    display: inline-block;
+    transition: 0.2s ease-in-out;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.cta-btn:hover {
+    transform: scale(1.05);
+}
+
+/* About Cards Hover Effect */
+.about-card {
+    transition: all 0.25s ease-in-out;
+}
+
+.about-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Send Message Button Hover */
+.contact-form button, 
+.contact-form input[type="submit"] {
+    transition: all 0.25s ease-in-out;
+}
+
+.contact-form button:hover, 
+.contact-form input[type="submit"]:hover {
+    transform: scale(1.05);
+    background-color: #000; 
+    color: #fff;
+    box-shadow: 0px 10px 25px rgba(0,0,0,0.15);
+}
+
+/* Features Page Header */
+.features-header {
+    text-align: center;
+    padding-top: 40px;
+    margin-bottom: 5px;
+}
+
+.features-header h1 {
+    font-size: 34px;
+    font-weight: 700;
+    color: #222;
+}
+
+.features-header p {
+    font-size: 18px;
+    color: #555;
+    max-width: 650px;
+    margin: 5px auto 0 auto;
+}
