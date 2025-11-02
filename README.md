@@ -72,13 +72,14 @@ project/
     cd project-folder
 
   4. Open the project
-  Option 1: Double-click index.html
+     
+      Option 1: Double-click index.html
 
-  Option 2 (Recommended): VS Code Live Server
+      Option 2 (Recommended): VS Code Live Server
 
-      -Right-click index.html
+          -Right-click index.html
 
-      -Select "Open with Live Server"
+          -Select "Open with Live Server"
 
 ## 🌐 Deployment (Vercel)
 This project is already deployed on Vercel.
