@@ -9,7 +9,7 @@
 > 🧠 A smart, elegant **student productivity assistant** built using **Flask**, **HTML**, **CSS**, and **JavaScript**.  
 > Helps students stay organized, collaborate with peers, and manage academic life efficiently.  
 
-🌐 **Live Demo:** [Student Assistant on Vercel](https://internship-project-snowy.vercel.app/)  
+🌐 **Live Demo:** [Student Assistant on PythonAnywhere](https://internship-project-snowy.vercel.app/)  
 
 ---
 
@@ -34,7 +34,7 @@
 | 🎨 **Frontend** | HTML5, CSS3, JavaScript, Font Awesome |
 | ⚙️ **Backend** | Python Flask |
 | 🗄️ **Database** | SQLite3 |
-| 🌍 **Hosting** | Vercel (Frontend) |
+| 🌍 **Hosting** | PythonAnywhere |
 | 🔧 **Version Control** | Git & GitHub |
 
 ---
@@ -113,13 +113,7 @@ Then open your browser and go to:
 👉 http://127.0.0.1:5000/
 
 ## 🚀 Deployment
-This project is deployed on Vercel for frontend hosting.
-To deploy your own version:
-
-bash
-Copy code
-vercel deploy
-You can also run Flask locally for backend interactions.
+This project is deployed on pythonAnywhere
 
 ## 📚 What This Project Demonstrates
 💡 Structuring a full Flask web application
@@ -134,7 +128,7 @@ You can also run Flask locally for backend interactions.
 
 💡 Managing Git and GitHub version control efficiently
 
-💡 Deploying static websites using Vercel
+💡 Deploying static websites using pythonAnywhere
 
 ## 🔮 Future Enhancements
 ✨ Dynamic dashboard for task and deadline tracking
