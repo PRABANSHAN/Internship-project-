@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, session, render_template, flash
+from flask import Flask, request, redirect, session, render_template
 import sqlite3
 import os
 
@@ -30,7 +30,9 @@ def home():
 
 @app.route('/features')
 def features():
-    return render_template('features.html')
+    if 'user' in session:
+        return render_template('features.html')
+    return redirect('/signin')
 
 @app.route('/about')
 def about():
@@ -43,8 +45,7 @@ def contact():
         email = request.form['email']
         message = request.form['message']
         print(f"Message from {name} ({email}): {message}")
-        flash('Thanks for contacting us! We\'ll get back to you soon.', 'success')
-        return redirect('/contact')
+        return "✅ Thanks for contacting us! We'll get back to you soon."
     return render_template('contact.html')
 
 @app.route('/profile')
@@ -61,8 +62,6 @@ def under_construction():
 
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():
-    if 'user' in session:
-        return redirect('/features')
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -75,14 +74,11 @@ def signin():
             session['user'] = user[1]
             return redirect('/features')
         else:
-            flash('Invalid email or password. Please try again.', 'error')
-            return redirect('/signin')
+            return "Invalid email or password"
     return render_template('signin.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    if 'user' in session:
-        return redirect('/features')
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
@@ -93,17 +89,14 @@ def signup():
             c.execute("INSERT INTO users (name, email, password) VALUES (?, ?, ?)", (name, email, password))
             conn.commit()
             conn.close()
-            flash('Account created successfully! Please sign in.', 'success')
-            return redirect('/features')
-        except sqlite3.IntegrityError:
-            flash('Email already registered. Please sign in.', 'error')
             return redirect('/signin')
+        except sqlite3.IntegrityError:
+            return "Email already registered"
     return render_template('signup.html')
 
 @app.route('/logout')
 def logout():
     session.pop('user', None)
-    flash('You have been logged out successfully.', 'success')
     return redirect('/signin')
 
 # ---------------------- RUN APP ----------------------

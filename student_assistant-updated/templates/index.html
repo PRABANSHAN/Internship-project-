@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Assistant</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo-link"><div class="logo">Student Assistant</div></a>
+  <nav class="nav-links">
+    <a href="/">Home</a>
+    <a href="/features">Features</a>
+    <a href="/about">About</a>
+    <a href="/contact">Contact Us</a>
+  </nav>
+  {% if session.get('user') %}
+    <div class="user-info">
+      <span class="welcome"><i class="fa-solid fa-user"></i> Hi, {{ session['user'] }}</span>
+      <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+  {% else %}
+    <a href="/signin" class="signin-btn">Sign in</a>
+  {% endif %}
+  
+</header>
+
+<section class="hero">
+  <h1 class="hero-title">Your Personal Student Assistant</h1>
+  <p class="hero-subtitle">Organize your academic life, collaborate with peers, and stay on top of your tasks.</p>
+  <a href="{% if session.get('user') %}/features{% else %}/signin{% endif %}" class="cta-btn">Get Started</a>
+</section>
+
+<section class="features-grid">
+  <div class="feature-card small-card">
+    <i class="fa-solid fa-book"></i>
+    <h3>Assignment Tracker</h3>
+    <p>Keep track of all your assignments and deadlines in one place.</p>
+  </div>
+  <div class="feature-card small-card">
+    <i class="fa-solid fa-users"></i>
+    <h3>Group Collaboration</h3>
+    <p>Create study groups, share notes, and work on projects together.</p>
+  </div>
+  <div class="feature-card small-card">
+    <i class="fa-solid fa-calendar"></i>
+    <h3>Schedule Planner</h3>
+    <p>Plan your week, set reminders, and never miss a class or deadline.</p>
+  </div>
+</section>
+
+</body>
+</html>

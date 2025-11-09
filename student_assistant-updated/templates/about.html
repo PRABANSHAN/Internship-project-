@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About - Student Assistant</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo-link"><div class="logo">Student Assistant</div></a>
+  <nav class="nav-links">
+    <a href="/">Home</a>
+    <a href="/features">Features</a>
+    <a href="/about" class="active">About</a>
+    <a href="/contact">Contact Us</a>
+  </nav>
+  {% if session.get('user') %}
+    <div class="user-info">
+      <span class="welcome"><i class="fa-solid fa-user"></i> Hi, {{ session['user'] }}</span>
+      <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+  {% else %}
+    <a href="/signin" class="signin-btn">Sign in</a>
+  {% endif %}
+  
+</header>
+
+<section class="hero small-hero">
+  <h1>About Student Assistant</h1>
+  <p>Empowering students to achieve academic excellence and personal growth.</p>
+</section>
+
+<section class="features-grid">
+  <div class="feature-card">
+    <h3 class="about-card-h3">Our Mission</h3>
+    <p class="about-card-p">To simplify academic life and make productivity tools accessible to every student.</p>
+  </div>
+
+  <div class="feature-card">
+    <h3 class="about-card-h3">Our Vision</h3>
+    <p class="about-card-p">To empower students worldwide with smart technology that supports learning, planning, and collaboration.</p>
+  </div>
+
+  <div class="feature-card">
+    <h3 class="about-card-h3">Our Values</h3>
+    <p class="about-card-p"><b>Innovation:</b> We constantly evolve to meet modern learning challenges.</p>
+    <p class="about-card-p"><b>Accessibility:</b> Our platform is inclusive and user-friendly for everyone.</p>
+    <p class="about-card-p"><b>Collaboration:</b> Learning is better together.</p>
+  </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Under Construction</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo-link"><div class="logo">Student Assistant</div></a>
+  <nav class="nav-links">
+    <a href="/">Home</a>
+    <a href="/features">Features</a>
+    <a href="/about">About</a>
+    <a href="/contact">Contact</a>
+  </nav>
+  {% if session.get('user') %}
+    <div class="user-info">
+      <span class="welcome"><i class="fa-solid fa-user"></i> Hi, {{ session['user'] }}</span>
+      <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+  {% else %}
+    <a href="/signin" class="signin-btn">Sign in</a>
+  {% endif %}
+</header>
+
+<main>
+  <h1>Under Construction</h1>
+  <p>Coming soon...</p>
+</main>
+
+</body>
+</html>
