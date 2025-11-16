@@ -1,7 +1,15 @@
+# Application dependencies (pinned to versions used during development)
 Flask==3.0.3
+requests==2.31.0
+python-dotenv==1.0.0
+pyngrok==6.0.0
+
+# Dev / runtime supporting packages
 gunicorn==21.2.0
 Jinja2==3.1.4
 Werkzeug==3.0.4
 itsdangerous==2.1.2
 click==8.1.7
-sqlite3
+
+# Testing
+pytest==7.4.2

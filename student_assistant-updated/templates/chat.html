@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profile</title>
+  <title>Chat - Student Assistant</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
@@ -15,8 +15,8 @@
     <a href="/">Home</a>
     <a href="/features">Features</a>
     <a href="/about">About</a>
-    <a href="/contact">Contact</a>
-    <a href="/chat">Chat</a>
+    <a href="/contact">Contact Us</a>
+    <a href="/chat" class="active">Chat</a>
   </nav>
   {% if session.get('user') %}
     <div class="user-info">
@@ -29,10 +29,25 @@
   
 </header>
 
-<main>
-  <h1>Your Profile</h1>
-  <p>Profile settings coming soon...</p>
+<main class="chat-page">
+  <section class="hero small-hero">
+    <h1>AI Chat</h1>
+    <p>Ask questions or get help from the assistant.</p>
+  </section>
+  <div style="max-width:800px;margin:0 auto;padding:10px 20px;text-align:center;">
+    {% if hf_enabled %}
+      <div class="alert" style="background:#e8f8ee;border-color:#c8f0d9;color:#036;">Advanced AI enabled (model: {{ hf_model }}).</div>
+    {% endif %}
+  </div>
+  <div class="chat-container">
+    <div id="messages" class="messages"></div>
+    <form id="chat-form" class="chat-form">
+      <input id="msg" autocomplete="off" placeholder="Type your message..." />
+      <button type="submit" class="btn">Send</button>
+    </form>
+  </div>
 </main>
 
+<script src="{{ url_for('static', filename='chat.js') }}"></script>
 </body>
 </html>

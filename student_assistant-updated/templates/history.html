@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact - Student Assistant</title>
+  <title>Chat History</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
@@ -15,7 +14,7 @@
     <a href="/">Home</a>
     <a href="/features">Features</a>
     <a href="/about">About</a>
-    <a href="/contact" class="active">Contact Us</a>
+    <a href="/contact">Contact Us</a>
     <a href="/chat">Chat</a>
   </nav>
   {% if session.get('user') %}
@@ -29,17 +28,23 @@
   
 </header>
 
-<section class="hero small-hero">
-  <h1>Contact Us</h1>
-  <p>Have questions or feedback? We'd love to hear from you.</p>
-</section>
-
-<form method="POST" class="form-container">
-  <input type="text" name="name" placeholder="Your Name" required>
-  <input type="email" name="email" placeholder="Your Email" required>
-  <textarea name="message" placeholder="Your Message" required></textarea>
-  <button class="btn" type="submit">Send Message</button>
-</form>
+<main style="max-width:900px;margin:40px auto;padding:0 20px;">
+  <h1>Your Chat History</h1>
+  {% if messages %}
+    <div class="chat-container">
+      <div class="messages">
+        {% for m in messages %}
+          <div class="message {{ 'user' if m.role=='user' else 'bot' }}">
+            <div style="font-size:12px;color:#666;margin-bottom:6px;">{{ m.created_at }}</div>
+            <div>{{ m.content }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% else %}
+    <p>No messages found.</p>
+  {% endif %}
+</main>
 
 </body>
 </html>

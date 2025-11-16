@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Settings</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
@@ -15,6 +16,7 @@
     <a href="/features">Features</a>
     <a href="/about">About</a>
     <a href="/contact">Contact</a>
+    <a href="/chat">Chat</a>
   </nav>
   {% if session.get('user') %}
     <div class="user-info">
@@ -29,7 +31,28 @@
 
 <main>
   <h1>Settings</h1>
-  <p>Feature coming soon</p>
+  <p>Manage advanced AI settings for your session.</p>
+
+  <section class="settings-block">
+    <h3>Hugging Face API Key (session)</h3>
+    <p>You can paste a Hugging Face API key here to enable advanced AI replies for your current browser session. The key is stored server-side in your session and is not committed to the repository.</p>
+    <form method="post" action="/settings">
+      <label for="hf_api_key">Hugging Face API Key</label><br />
+      <input id="hf_api_key" name="hf_api_key" type="password" placeholder="Paste key here" value="{% if session.get('hf_api_key') %}{{ session.get('hf_api_key')[:4] }}...{% endif %}" style="width:60%;" />
+      <div style="margin-top:8px">
+        <button type="submit">Save</button>
+        <button type="submit" name="hf_api_key" value="">Clear</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="settings-block">
+    <h3>Notes</h3>
+    <ul>
+      <li>If you want the advanced mode to be available for all users on the server, set <code>HUGGINGFACE_API_KEY</code> in the environment (or in a local <code>.env</code> for development).</li>
+      <li>Your session key is stored until your browser session expires or you click Clear.</li>
+    </ul>
+  </section>
 </main>
 
 </body>
