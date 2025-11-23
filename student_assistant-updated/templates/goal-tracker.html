@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Goal Tracker - Student Assistant{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="text-center mb-5">
+    <h1>Goal Tracker</h1>
+    <p class="lead">Track academic progress and stay motivated toward your goals.</p>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card mb-4">
+        <div class="card-body">
+          <form id="add-goal-form">
+            <div class="row g-3 align-items-center">
+              <div class="col-md-5">
+                <input type="text" id="goal-name" class="form-control" placeholder="Goal Name" required>
+              </div>
+              <div class="col-md-5">
+                <input type="date" id="target-date" class="form-control" required>
+              </div>
+              <div class="col-md-2 d-grid">
+                <button type="submit" class="btn btn-primary">Add</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="goal-list" class="list-group">
+        {% for goal in goals %}
+        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="goal-{{ goal.id }}">
+          <div>
+            <h5 class="mb-1">{{ goal.name }}</h5>
+            <small>Target: {{ goal.target_date }}</small>
+            <span class="badge rounded-pill bg-secondary ms-2 goal-status-{{ goal.status }}">{{ goal.status }}</span>
+          </div>
+          <div>
+            <div class="form-check form-switch d-inline-block me-3">
+                <input class="form-check-input" type="checkbox" id="status-toggle-{{ goal.id }}"
+                       {% if goal.status == 'completed' %}checked{% endif %}
+                       onchange="updateGoalStatus({{ goal.id }}, this.checked)">
+                <label class="form-check-label" for="status-toggle-{{ goal.id }}">Completed</label>
+            </div>
+            <button class="btn btn-danger btn-sm" onclick="deleteGoal({{ goal.id }})">Delete</button>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const addGoalForm = document.getElementById('add-goal-form');
+  const goalNameInput = document.getElementById('goal-name');
+  const targetDateInput = document.getElementById('target-date');
+  const goalList = document.getElementById('goal-list');
+
+  addGoalForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const name = goalNameInput.value.trim();
+    const targetDate = targetDateInput.value;
+
+    if (!name) {
+      alert('Goal name cannot be empty.');
+      return;
+    }
+
+    if (!targetDate) {
+      alert('Target date cannot be empty.');
+      return;
+    }
+
+    fetch('/api/goals', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name: name, target_date: targetDate }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.id) {
+        const newGoal = document.createElement('div');
+        newGoal.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center';
+        newGoal.id = 'goal-' + data.id;
+        newGoal.innerHTML = `
+          <div>
+            <h5 class="mb-1">${data.name}</h5>
+            <small>Target: ${data.target_date}</small>
+            <span class="badge rounded-pill bg-secondary ms-2 goal-status-pending">pending</span>
+          </div>
+          <div>
+            <div class="form-check form-switch d-inline-block me-3">
+                <input class="form-check-input" type="checkbox" id="status-toggle-${data.id}"
+                       onchange="updateGoalStatus(${data.id}, this.checked)">
+                <label class="form-check-label" for="status-toggle-${data.id}">Completed</label>
+            </div>
+            <button class="btn btn-danger btn-sm" onclick="deleteGoal(${data.id})">Delete</button>
+          </div>
+        `;
+        goalList.appendChild(newGoal);
+        addGoalForm.reset();
+      } else if (data.error) {
+        alert('Error adding goal: ' + data.error);
+      }
+    })
+    .catch(error => {
+      console.error('Error adding goal:', error);
+      alert('An error occurred while adding the goal.');
+    });
+  });
+
+  window.deleteGoal = function(goalId) {
+    if (confirm('Are you sure you want to delete this goal?')) {
+      fetch('/api/goals/' + goalId, {
+        method: 'DELETE',
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message) {
+          const goalElement = document.getElementById('goal-' + goalId);
+          if (goalElement) {
+            goalElement.remove();
+          }
+        } else if (data.error) {
+          alert('Error deleting goal: ' + data.error);
+        }
+      })
+      .catch(error => {
+        console.error('Error deleting goal:', error);
+        alert('An error occurred while deleting the goal.');
+      });
+    }
+  }
+
+  window.updateGoalStatus = function(goalId, isCompleted) {
+    const status = isCompleted ? 'completed' : 'pending';
+    fetch(`/api/goals/${goalId}/status`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ status: status }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.message) {
+        const statusBadge = document.querySelector(`#goal-${goalId} .goal-status-pending, #goal-${goalId} .goal-status-completed`);
+        if (statusBadge) {
+            statusBadge.textContent = status;
+            statusBadge.classList.remove('goal-status-pending', 'goal-status-completed');
+            statusBadge.classList.add(`goal-status-${status}`);
+            statusBadge.classList.remove('bg-secondary', 'bg-success'); // Remove old background
+            statusBadge.classList.add(isCompleted ? 'bg-success' : 'bg-secondary'); // Add new background
+        }
+      } else if (data.error) {
+        alert('Error updating status: ' + data.error);
+        // Revert checkbox state on error
+        document.getElementById(`status-toggle-${goalId}`).checked = !isCompleted;
+      }
+    })
+    .catch(error => {
+      console.error('Error updating goal status:', error);
+      alert('An error occurred while updating the goal status.');
+      // Revert checkbox state on error
+      document.getElementById(`status-toggle-${goalId}`).checked = !isCompleted;
+    });
+  }
+});
+</script>
+{% endblock %}

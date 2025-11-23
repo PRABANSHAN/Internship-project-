@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Schedule Planner - Student Assistant{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="text-center mb-4">
+    <h1 class="page-subheader">Schedule Planner</h1>
+    <p class="sublead">Plan your week, set reminders, and never miss a class or deadline.</p>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-10">
+      <div class="card mb-4">
+        <div class="card-body">
+          <form id="add-event-form" class="row gx-2 gy-2 align-items-center">
+            <div class="col-12 col-md-6">
+              <input type="text" id="event-name" class="form-control" placeholder="Event Name" required>
+            </div>
+            <div class="col-12 col-md-4">
+              <input type="datetime-local" id="event-time" class="form-control" required>
+            </div>
+            <div class="col-12 col-md-2 d-grid">
+              <button type="submit" class="btn btn-primary">Add Event</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="event-grid" class="schedule-grid">
+        {% for event in events %}
+        <div class="event-card" id="event-{{ event.id }}">
+          <div class="event-date">{{ event.formatted_time.split(' ')[0] if event.formatted_time else '' }}</div>
+          <div class="event-body">
+            <h5 class="event-title">{{ event.name }}</h5>
+            <div class="event-time">{{ event.formatted_time or event.time }}</div>
+          </div>
+          <div class="event-actions">
+            <button class="btn btn-sm btn-outline-danger" onclick="deleteEvent({{ event.id }})">Delete</button>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showFlashMessage(message, category) {
+  const existing = document.querySelector('.page-flash');
+  if (existing) existing.remove();
+  const el = document.createElement('div');
+  el.className = `alert alert-${category} page-flash`;
+  el.textContent = message;
+  document.querySelector('.container').prepend(el);
+  setTimeout(() => el.remove(), 4500);
+}
+
+function formatDisplayTime(isoOrRaw) {
+  try {
+    const d = new Date(isoOrRaw);
+    if (!isNaN(d)) return d.toLocaleString();
+  } catch (e) {}
+  return isoOrRaw;
+}
+
+document.getElementById('add-event-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  const name = document.getElementById('event-name').value.trim();
+  const time = document.getElementById('event-time').value;
+  if (!name) { showFlashMessage('Event name cannot be empty.', 'danger'); return; }
+  if (!time) { showFlashMessage('Event time cannot be empty.', 'danger'); return; }
+  const selected = new Date(time);
+  if (selected < new Date()) { showFlashMessage('Event time cannot be in the past.', 'danger'); return; }
+
+  fetch('/api/schedule-events', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({name, time}) })
+    .then(r=>r.json())
+    .then(data=>{
+      if (data.id) {
+        const grid = document.getElementById('event-grid');
+        const card = document.createElement('div');
+        card.className = 'event-card';
+        card.id = 'event-'+data.id;
+        // use server-provided formatted_time when available
+        const formatted = data.formatted_time || data.time || '';
+        const datePart = (formatted && formatted.split(' ').length) ? formatted.split(' ')[0] : '';
+        card.innerHTML = `
+          <div class="event-date">${datePart}</div>
+          <div class="event-body">
+            <h5 class="event-title">${data.name}</h5>
+            <div class="event-time">${formatted}</div>
+          </div>
+          <div class="event-actions"><button class="btn btn-sm btn-outline-danger" onclick="deleteEvent(${data.id})">Delete</button></div>
+        `;
+        grid.prepend(card);
+        document.getElementById('add-event-form').reset();
+        showFlashMessage('Event added.', 'success');
+      } else if (data.error) showFlashMessage(data.error, 'danger');
+    }).catch(err=>{ console.error(err); showFlashMessage('Error adding event','danger'); });
+});
+
+function deleteEvent(id){
+  if (!confirm('Delete this event?')) return;
+  fetch('/api/schedule-events/'+id, { method:'DELETE' })
+    .then(r=>r.json())
+    .then(data=>{
+      if (data.message) {
+        const el = document.getElementById('event-'+id);
+        if (el) el.remove();
+        showFlashMessage(data.message, 'success');
+      } else if (data.error) showFlashMessage(data.error, 'danger');
+    }).catch(err=>{ console.error(err); showFlashMessage('Error deleting event','danger'); });
+}
+</script>
+
+{% endblock %}

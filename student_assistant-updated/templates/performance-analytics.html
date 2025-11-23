@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}Performance Analytics - Student Assistant{% endblock %}
+
+{% block content %}
+<main>
+  <section class="hero small-hero">
+    <h1 class="page-subheader">Performance Analytics</h1>
+    <p class="sublead">Visualize progress over time, identify strengths, and get actionable insights to improve your study habits.</p>
+  </section>
+
+  <div class="container py-4">
+    <div class="row gx-4 gy-4 align-items-start">
+      <div class="col-lg-6 col-md-6">
+        <div class="card feature-card h-100 analytics-card">
+          <div class="card-body text-center">
+            <h3 class="card-title mb-3">Your Assignments Overview</h3>
+            <div style="max-width:420px;margin:0 auto;">
+              <canvas id="assignmentPerformanceChart"></canvas>
+            </div>
+            <div class="text-center mt-3 small muted">
+              <p class="mb-1">Total Assignments: <strong id="totalAssignments"></strong></p>
+              <p class="mb-1">Completed: <strong id="completedAssignments"></strong> (<span id="completedAssignmentsPercent"></span>%)</p>
+              <p class="mb-0">Pending: <strong id="pendingAssignments"></strong> (<span id="pendingAssignmentsPercent"></span>%)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-6">
+        <div class="card feature-card h-100 analytics-card">
+          <div class="card-body text-center">
+            <h3 class="card-title mb-3">Your Goals Overview</h3>
+            <div style="max-width:420px;margin:0 auto;">
+              <canvas id="goalPerformanceChart"></canvas>
+            </div>
+            <div class="text-center mt-3 small muted">
+              <p class="mb-1">Total Goals: <strong id="totalGoals"></strong></p>
+              <p class="mb-1">Completed: <strong id="completedGoals"></strong> (<span id="completedGoalsPercent"></span>%)</p>
+              <p class="mb-0">Pending: <strong id="pendingGoals"></strong> (<span id="pendingGoalsPercent"></span>%)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    fetch('/api/performance-data')
+      .then(response => response.json())
+      .then(data => {
+        // Assignment Chart
+        const assignmentCtx = document.getElementById('assignmentPerformanceChart').getContext('2d');
+        new Chart(assignmentCtx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Completed Assignments', 'Pending Assignments'],
+            datasets: [{
+              data: [data.assignments.completed, data.assignments.pending],
+              backgroundColor: ['#4CAF50', '#FFC107'], // Green for completed, yellow for pending
+              hoverOffset: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: 'top',
+                labels: {
+                  color: '#333'
+                }
+              },
+              title: {
+                display: false
+              }
+            }
+          }
+        });
+
+        // Update assignment summary
+        document.getElementById('totalAssignments').textContent = data.assignments.total;
+        document.getElementById('completedAssignments').textContent = data.assignments.completed;
+        document.getElementById('pendingAssignments').textContent = data.assignments.pending;
+
+        const completedAssignmentsPercent = data.assignments.total > 0 ? ((data.assignments.completed / data.assignments.total) * 100).toFixed(0) : 0;
+        const pendingAssignmentsPercent = data.assignments.total > 0 ? ((data.assignments.pending / data.assignments.total) * 100).toFixed(0) : 0;
+        document.getElementById('completedAssignmentsPercent').textContent = completedAssignmentsPercent;
+        document.getElementById('pendingAssignmentsPercent').textContent = pendingAssignmentsPercent;
+
+        // Goal Chart
+        const goalCtx = document.getElementById('goalPerformanceChart').getContext('2d');
+        new Chart(goalCtx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Completed Goals', 'Pending Goals'],
+            datasets: [{
+              data: [data.goals.completed, data.goals.pending],
+              backgroundColor: ['#28A745', '#DC3545'], // Green for completed, Red for pending
+              hoverOffset: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: 'top',
+                labels: {
+                  color: '#333'
+                }
+              },
+              title: {
+                display: false
+              }
+            }
+          }
+        });
+
+        // Update goal summary
+        document.getElementById('totalGoals').textContent = data.goals.total;
+        document.getElementById('completedGoals').textContent = data.goals.completed;
+        document.getElementById('pendingGoals').textContent = data.goals.pending;
+
+        const completedGoalsPercent = data.goals.total > 0 ? ((data.goals.completed / data.goals.total) * 100).toFixed(0) : 0;
+        const pendingGoalsPercent = data.goals.total > 0 ? ((data.goals.pending / data.goals.total) * 100).toFixed(0) : 0;
+        document.getElementById('completedGoalsPercent').textContent = completedGoalsPercent;
+        document.getElementById('pendingGoalsPercent').textContent = pendingGoalsPercent;
+
+      })
+      .catch(error => console.error('Error fetching performance data:', error));
+  });
+</script>
+{% endblock %}

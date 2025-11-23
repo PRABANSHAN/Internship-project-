@@ -1,50 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-<header>
-  <a href="/" class="logo-link"><div class="logo">Student Assistant (Admin)</div></a>
-  <nav class="nav-links">
-    <a href="/">Home</a>
-    <a href="/admin" class="active">Admin</a>
-    <a href="/chat">Chat</a>
-  </nav>
-  <a href="/admin/logout" class="signin-btn">Logout</a>
-</header>
+{% extends "base.html" %}
 
-<main style="max-width:1100px;margin:30px auto;padding:20px;">
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<main class="admin-dashboard-main">
   <h1>Admin Dashboard</h1>
-  <section style="margin-bottom:20px;">
+  <section class="admin-section">
     <h2>Users</h2>
-    <table style="width:100%;border-collapse:collapse">
-      <tr><th style="text-align:left">ID</th><th>Name</th><th>Email</th></tr>
-      {% for u in users %}
-      <tr style="border-top:1px solid #eee"><td>{{ u.id }}</td><td>{{ u.name }}</td><td>{{ u.email }}</td></tr>
-      {% endfor %}
+    <table class="admin-table">
+      <thead>
+        <tr><th>ID</th><th>Name</th><th>Email</th></tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+        <tr><td>{{ u.id }}</td><td>{{ u.name }}</td><td>{{ u.email }}</td></tr>
+        {% endfor %}
+      </tbody>
     </table>
   </section>
 
-  <section style="margin-bottom:20px;">
+  <section class="admin-section">
     <h2>Recent Messages</h2>
-    <a class="btn" href="/admin/export">Export CSV</a>
-    <form method="POST" action="/admin/prune" style="display:inline-block;margin-left:12px;">
-      <label>Prune messages older than <input type="number" name="days" value="30" style="width:70px;"> days</label>
-      <button class="btn" type="submit">Prune</button>
+    <a class="btn btn-primary" href="/admin/export">Export CSV</a>
+    <form method="POST" action="/admin/prune" class="admin-prune-form">
+      <label>Prune messages older than <input type="number" name="days" value="30" class="form-control-sm"> days</label>
+      <button class="btn btn-primary btn-sm" type="submit">Prune</button>
     </form>
-    <div style="margin-top:12px">
+    <div class="admin-messages-list">
       {% for m in messages %}
-        <div style="border-bottom:1px solid #f0f0f0;padding:8px 0;">
-          <div style="font-size:12px;color:#666">{{ m.created_at }} — user_id: {{ m.user_id }} — {{ m.role }}</div>
-          <div>{{ m.content }}</div>
+        <div class="admin-message-item">
+          <div class="admin-message-meta">{{ m.created_at }} — user_id: {{ m.user_id }} — {{ m.role }}</div>
+          <div class="admin-message-content">{{ m.content }}</div>
         </div>
       {% endfor %}
     </div>
   </section>
 </main>
-</body>
-</html>
+{% endblock %}

@@ -1,77 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Features - Student Assistant</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
-</head>
-<body>
+{% extends "base.html" %}
 
-<header>
-  <a href="/" class="logo-link"><div class="logo">Student Assistant</div></a>
-  <nav class="nav-links">
-    <a href="/">Home</a>
-    <a href="/features" class="active">Features</a>
-    <a href="/about">About</a>
-    <a href="/contact">Contact Us</a>
-    <a href="/chat">Chat</a>
-  </nav>
-  {% if session.get('user') %}
-    <div class="user-info">
-      <span class="welcome"><i class="fa-solid fa-user"></i> Hi, {{ session['user'] }}</span>
-      <a href="/logout" class="logout-btn">Logout</a>
+{% block title %}Features - Student Assistant{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="text-center mb-4">
+    <h1 class="page-subheader">Explore Features</h1>
+    <p class="sublead">Everything you need to manage your student life efficiently.</p>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6 col-lg-4 mb-4">
+      <a href="/assignment-tracker" class="text-decoration-none">
+        <div class="card h-100 text-center feature-card">
+          <div class="card-body">
+            <i class="fa-solid fa-book fa-3x mb-3"></i>
+            <h3 class="card-title">Assignment Tracker</h3>
+            <p class="card-text">Manage assignments, deadlines, and submissions seamlessly.</p>
+          </div>
+        </div>
+      </a>
     </div>
-  {% else %}
-    <a href="/signin" class="signin-btn">Sign in</a>
-  {% endif %}
-  
-</header>
-
-<section class="hero small-hero">
-  <h1>Explore Features</h1>
-  <p>Everything you need to manage your student life efficiently.</p>
-</section>
-
-<section class="features-grid">
-  <div class="feature-card small-card">
-    <i class="fa-solid fa-book"></i>
-    <h3>Assignment Tracker</h3>
-    <p>Manage assignments, deadlines, and submissions seamlessly.</p>
+    <div class="col-sm-6 col-lg-4 mb-4">
+      <a href="/group-collaboration" class="text-decoration-none">
+        <div class="card h-100 text-center feature-card">
+          <div class="card-body">
+            <i class="fa-solid fa-users fa-3x mb-3"></i>
+            <h3 class="card-title">Group Collaboration</h3>
+            <p class="card-text">Work together efficiently using built-in collaboration tools.</p>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-sm-6 col-lg-4 mb-4">
+      <a href="/schedule-planner" class="text-decoration-none">
+        <div class="card h-100 text-center feature-card">
+          <div class="card-body">
+            <i class="fa-solid fa-calendar fa-3x mb-3"></i>
+            <h3 class="card-title">Schedule Planner</h3>
+            <p class="card-text">Plan classes, set goals, and stay organized throughout your semester.</p>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-sm-6 col-lg-4 mb-4">
+      <a href="/goal-tracker" class="text-decoration-none">
+        <div class="card h-100 text-center feature-card">
+          <div class="card-body">
+            <i class="fa-solid fa-bullseye fa-3x mb-3"></i>
+            <h3 class="card-title">Goal Tracker</h3>
+            <p class="card-text">Track academic progress and stay motivated toward your goals.</p>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-sm-6 col-lg-4 mb-4">
+      <a href="/smart-reminders" class="text-decoration-none">
+        <div class="card h-100 text-center feature-card">
+          <div class="card-body">
+            <i class="fa-solid fa-bell fa-3x mb-3"></i>
+            <h3 class="card-title">Smart Reminders</h3>
+            <p class="card-text">Receive timely reminders to never miss deadlines or meetings.</p>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-sm-6 col-lg-4 mb-4">
+      <a href="/performance-analytics" class="text-decoration-none">
+        <div class="card h-100 text-center feature-card">
+          <div class="card-body">
+            <i class="fa-solid fa-chart-line fa-3x mb-3"></i>
+            <h3 class="card-title">Performance Analytics</h3>
+            <p class="card-text">Visualize your academic performance through charts and insights.</p>
+          </div>
+        </div>
+      </a>
+    </div>
   </div>
-
-  <div class="feature-card small-card">
-    <i class="fa-solid fa-users"></i>
-    <h3>Group Collaboration</h3>
-    <p>Work together efficiently using built-in collaboration tools.</p>
-  </div>
-
-  <div class="feature-card small-card">
-    <i class="fa-solid fa-calendar"></i>
-    <h3>Schedule Planner</h3>
-    <p>Plan classes, set goals, and stay organized throughout your semester.</p>
-  </div>
-
-  <div class="feature-card small-card">
-    <i class="fa-solid fa-bullseye"></i>
-    <h3>Goal Tracker</h3>
-    <p>Track academic progress and stay motivated toward your goals.</p>
-  </div>
-
-  <div class="feature-card small-card">
-    <i class="fa-solid fa-bell"></i>
-    <h3>Smart Reminders</h3>
-    <p>Receive timely reminders to never miss deadlines or meetings.</p>
-  </div>
-
-  <div class="feature-card small-card">
-    <i class="fa-solid fa-chart-line"></i>
-    <h3>Performance Analytics</h3>
-    <p>Visualize your academic performance through charts and insights.</p>
-  </div>
-</section>
-
-</body>
-</html>
+</div>
+{% endblock %}

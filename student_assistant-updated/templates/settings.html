@@ -1,59 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Settings</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-</head>
-<body>
+{% extends "base.html" %}
 
-<header>
-  <a href="/" class="logo-link"><div class="logo">Student Assistant</div></a>
-  <nav class="nav-links">
-    <a href="/">Home</a>
-    <a href="/features">Features</a>
-    <a href="/about">About</a>
-    <a href="/contact">Contact</a>
-    <a href="/chat">Chat</a>
-  </nav>
-  {% if session.get('user') %}
-    <div class="user-info">
-      <span class="welcome"><i class="fa-solid fa-user"></i> Hi, {{ session['user'] }}</span>
-      <a href="/logout" class="logout-btn">Logout</a>
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<main class="container py-5">
+  <div class="text-center mb-5">
+    <h1>Settings</h1>
+    <p class="lead">Manage advanced AI settings for your session.</p>
+  </div>
+
+  <section class="card feature-card mb-4"> {# Re-using feature-card for consistent styling #}
+    <div class="card-body">
+      <h3 class="card-title text-center">Hugging Face API Key (session)</h3>
+      <p class="card-text text-center">You can paste a Hugging Face API key here to enable advanced AI replies for your current browser session. The key is stored server-side in your session and is not committed to the repository.</p>
+      <form method="post" action="/settings" class="text-center mt-3">
+        <label for="hf_api_key" class="form-label visually-hidden">Hugging Face API Key</label>
+        <input id="hf_api_key" name="hf_api_key" type="password" placeholder="Paste key here"
+               value="{% if session.get('hf_api_key') %}{{ session.get('hf_api_key')[:4] }}...{% endif %}"
+               class="form-control d-inline-block w-auto me-2" style="max-width:300px;" />
+        <div class="mt-3">
+          <button type="submit" class="btn btn-primary me-2">Save</button>
+          <button type="submit" name="hf_api_key" value="" class="btn btn-secondary">Clear</button>
+        </div>
+      </form>
     </div>
-  {% else %}
-    <a href="/signin" class="signin-btn">Sign in</a>
-  {% endif %}
-  
-</header>
-
-<main>
-  <h1>Settings</h1>
-  <p>Manage advanced AI settings for your session.</p>
-
-  <section class="settings-block">
-    <h3>Hugging Face API Key (session)</h3>
-    <p>You can paste a Hugging Face API key here to enable advanced AI replies for your current browser session. The key is stored server-side in your session and is not committed to the repository.</p>
-    <form method="post" action="/settings">
-      <label for="hf_api_key">Hugging Face API Key</label><br />
-      <input id="hf_api_key" name="hf_api_key" type="password" placeholder="Paste key here" value="{% if session.get('hf_api_key') %}{{ session.get('hf_api_key')[:4] }}...{% endif %}" style="width:60%;" />
-      <div style="margin-top:8px">
-        <button type="submit">Save</button>
-        <button type="submit" name="hf_api_key" value="">Clear</button>
-      </div>
-    </form>
   </section>
 
-  <section class="settings-block">
-    <h3>Notes</h3>
-    <ul>
-      <li>If you want the advanced mode to be available for all users on the server, set <code>HUGGINGFACE_API_KEY</code> in the environment (or in a local <code>.env</code> for development).</li>
-      <li>Your session key is stored until your browser session expires or you click Clear.</li>
-    </ul>
+  <section class="card feature-card"> {# Re-using feature-card for consistent styling #}
+    <div class="card-body">
+      <h3 class="card-title text-center">Notes</h3>
+      <ul class="list-unstyled text-center">
+        <li>If you want the advanced mode to be available for all users on the server, set <code>HUGGINGFACE_API_KEY</code> in the environment (or in a local <code>.env</code> for development).</li>
+        <li>Your session key is stored until your browser session expires or you click Clear.</li>
+      </ul>
+    </div>
   </section>
 </main>
-
-</body>
-</html>
+{% endblock %}

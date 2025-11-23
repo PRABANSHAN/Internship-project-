@@ -1,40 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat - Student Assistant</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-</head>
-<body>
+{% extends "base.html" %}
 
-<header>
-  <a href="/" class="logo-link"><div class="logo">Student Assistant</div></a>
-  <nav class="nav-links">
-    <a href="/">Home</a>
-    <a href="/features">Features</a>
-    <a href="/about">About</a>
-    <a href="/contact">Contact Us</a>
-    <a href="/chat" class="active">Chat</a>
-  </nav>
-  {% if session.get('user') %}
-    <div class="user-info">
-      <span class="welcome"><i class="fa-solid fa-user"></i> Hi, {{ session['user'] }}</span>
-      <a href="/logout" class="logout-btn">Logout</a>
-    </div>
-  {% else %}
-    <a href="/signin" class="signin-btn">Sign in</a>
-  {% endif %}
-  
-</header>
+{% block title %}Chat - Student Assistant{% endblock %}
 
-<main class="chat-page">
+{% block full_width_hero %}
   <section class="hero small-hero">
-    <h1>AI Chat</h1>
-    <p>Ask questions or get help from the assistant.</p>
+    <h1 class="page-subheader">AI Chat</h1>
+    <p class="sublead">Get instant study help: ask questions, solve problems, or enable advanced AI for richer explanations. <a href="/settings" style="text-decoration:underline;">Enable advanced AI</a></p>
   </section>
-  <div style="max-width:800px;margin:0 auto;padding:10px 20px;text-align:center;">
+{% endblock %}
+
+{% block content %}
+  <div style="max-width:800px;margin:0 auto;text-align:center;">
     {% if hf_enabled %}
       <div class="alert" style="background:#e8f8ee;border-color:#c8f0d9;color:#036;">Advanced AI enabled (model: {{ hf_model }}).</div>
     {% endif %}
@@ -46,8 +22,8 @@
       <button type="submit" class="btn">Send</button>
     </form>
   </div>
-</main>
+{% endblock %}
 
+{% block extra_js %}
 <script src="{{ url_for('static', filename='chat.js') }}"></script>
-</body>
-</html>
+{% endblock %}

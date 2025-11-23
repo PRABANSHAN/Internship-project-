@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Assignment Tracker - Student Assistant{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="text-center mb-5">
+    <h1>Assignment Tracker</h1>
+    <p class="lead">Keep track of all your assignments and deadlines in one place.</p>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card mb-4">
+        <div class="card-body">
+          <form id="add-assignment-form">
+            <div class="row g-3 align-items-center">
+              <div class="col-md-5">
+                <input type="text" id="assignment-name" class="form-control" placeholder="Assignment Name" required>
+              </div>
+              <div class="col-md-5">
+                <input type="date" id="due-date" class="form-control" required>
+              </div>
+              <div class="col-md-2 d-grid">
+                <button type="submit" class="btn btn-primary">Add</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="assignment-list" class="list-group">
+        {% for assignment in assignments %}
+        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="assignment-{{ assignment.id }}">
+          <div>
+            <h5 class="mb-1">{{ assignment.name }}</h5>
+            <small>Due: {{ assignment.due_date }}</small>
+            <span class="badge rounded-pill bg-secondary ms-2 assignment-status-{{ assignment.status }}">{{ assignment.status }}</span>
+          </div>
+          <div>
+            <div class="form-check form-switch d-inline-block me-3">
+                <input class="form-check-input" type="checkbox" id="status-toggle-{{ assignment.id }}"
+                       {% if assignment.status == 'completed' %}checked{% endif %}
+                       onchange="updateAssignmentStatus({{ assignment.id }}, this.checked)">
+                <label class="form-check-label" for="status-toggle-{{ assignment.id }}">Completed</label>
+            </div>
+            <button class="btn btn-danger btn-sm" onclick="deleteAssignment({{ assignment.id }})">Delete</button>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const addAssignmentForm = document.getElementById('add-assignment-form');
+  const assignmentNameInput = document.getElementById('assignment-name');
+  const dueDateInput = document.getElementById('due-date');
+  const assignmentList = document.getElementById('assignment-list');
+
+  addAssignmentForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const name = assignmentNameInput.value.trim();
+    const dueDate = dueDateInput.value;
+
+    if (!name) {
+      alert('Assignment name cannot be empty.'); // Using alert for now, can be improved with flash messages
+      return;
+    }
+
+    if (!dueDate) {
+      alert('Due date cannot be empty.');
+      return;
+    }
+
+    fetch('/api/assignments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name: name, due_date: dueDate }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.id) {
+        const newAssignment = document.createElement('div');
+        newAssignment.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center';
+        newAssignment.id = 'assignment-' + data.id;
+        newAssignment.innerHTML = `
+          <div>
+            <h5 class="mb-1">${data.name}</h5>
+            <small>Due: ${data.due_date}</small>
+            <span class="badge rounded-pill bg-secondary ms-2 assignment-status-pending">pending</span>
+          </div>
+          <div>
+            <div class="form-check form-switch d-inline-block me-3">
+                <input class="form-check-input" type="checkbox" id="status-toggle-${data.id}"
+                       onchange="updateAssignmentStatus(${data.id}, this.checked)">
+                <label class="form-check-label" for="status-toggle-${data.id}">Completed</label>
+            </div>
+            <button class="btn btn-danger btn-sm" onclick="deleteAssignment(${data.id})">Delete</button>
+          </div>
+        `;
+        assignmentList.appendChild(newAssignment);
+        addAssignmentForm.reset();
+      } else if (data.error) {
+        alert('Error adding assignment: ' + data.error);
+      }
+    })
+    .catch(error => {
+      console.error('Error adding assignment:', error);
+      alert('An error occurred while adding the assignment.');
+    });
+  });
+
+  window.deleteAssignment = function(assignmentId) {
+    if (confirm('Are you sure you want to delete this assignment?')) {
+      fetch('/api/assignments/' + assignmentId, {
+        method: 'DELETE',
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message) {
+          const assignmentElement = document.getElementById('assignment-' + assignmentId);
+          if (assignmentElement) {
+            assignmentElement.remove();
+          }
+        } else if (data.error) {
+          alert('Error deleting assignment: ' + data.error);
+        }
+      })
+      .catch(error => {
+        console.error('Error deleting assignment:', error);
+        alert('An error occurred while deleting the assignment.');
+      });
+    }
+  }
+
+  window.updateAssignmentStatus = function(assignmentId, isCompleted) {
+    const status = isCompleted ? 'completed' : 'pending';
+    fetch(`/api/assignments/${assignmentId}/status`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ status: status }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.message) {
+        const statusBadge = document.querySelector(`#assignment-${assignmentId} .assignment-status-pending, #assignment-${assignmentId} .assignment-status-completed`);
+        if (statusBadge) {
+            statusBadge.textContent = status;
+            statusBadge.classList.remove('assignment-status-pending', 'assignment-status-completed');
+            statusBadge.classList.add(`assignment-status-${status}`);
+            statusBadge.classList.remove('bg-secondary', 'bg-success'); // Remove old background
+            statusBadge.classList.add(isCompleted ? 'bg-success' : 'bg-secondary'); // Add new background
+        }
+      } else if (data.error) {
+        alert('Error updating status: ' + data.error);
+        // Revert checkbox state on error
+        document.getElementById(`status-toggle-${assignmentId}`).checked = !isCompleted;
+      }
+    })
+    .catch(error => {
+      console.error('Error updating assignment status:', error);
+      alert('An error occurred while updating the assignment status.');
+      // Revert checkbox state on error
+      document.getElementById(`status-toggle-${assignmentId}`).checked = !isCompleted;
+    });
+  }
+});
+</script>
+{% endblock %}
